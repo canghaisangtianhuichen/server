@@ -18,7 +18,7 @@ type WarehouseApi struct{}
 func (w *WarehouseApi) GetV1WarehousesList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1WarehousesList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -34,7 +34,7 @@ func (w *WarehouseApi) GetV1WarehousesList(c *gin.Context) {
 func (w *WarehouseApi) GetV1GoodsList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1GoodsList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -50,7 +50,7 @@ func (w *WarehouseApi) GetV1GoodsList(c *gin.Context) {
 func (w *WarehouseApi) GetV1StaffsList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1StaffsList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -66,7 +66,7 @@ func (w *WarehouseApi) GetV1StaffsList(c *gin.Context) {
 func (w *WarehouseApi) GetV1CustomersList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1CustomersList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -82,7 +82,7 @@ func (w *WarehouseApi) GetV1CustomersList(c *gin.Context) {
 func (w *WarehouseApi) GetV1SuppliersList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1SuppliersList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -98,7 +98,7 @@ func (w *WarehouseApi) GetV1SuppliersList(c *gin.Context) {
 func (w *WarehouseApi) GetV1GoodsShelfsList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1GoodsShelfsList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -114,7 +114,7 @@ func (w *WarehouseApi) GetV1GoodsShelfsList(c *gin.Context) {
 func (w *WarehouseApi) GetV1OutWarehousesList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1OutWarehousesList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -139,7 +139,7 @@ func (w *WarehouseApi) GetV1OutWarehousesDetail(c *gin.Context) {
 func (w *WarehouseApi) GetV1InWarehousesList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV1InWarehousesList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -394,7 +394,7 @@ func (w *WarehouseApi) UpdateWarehouse(c *gin.Context) {
 func (w *WarehouseApi) GetV2GoodsList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV2GoodsList(utils.GetUserID(c), pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -410,7 +410,7 @@ func (w *WarehouseApi) GetV2GoodsList(c *gin.Context) {
 func (w *WarehouseApi) GetV2StaffsList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV2StaffsList(utils.GetUserID(c), pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -426,7 +426,7 @@ func (w *WarehouseApi) GetV2StaffsList(c *gin.Context) {
 func (w *WarehouseApi) GetV2CustomersList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV2CustomersList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -442,7 +442,7 @@ func (w *WarehouseApi) GetV2CustomersList(c *gin.Context) {
 func (w *WarehouseApi) GetV2SuppliersList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV2SuppliersList(pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -458,7 +458,7 @@ func (w *WarehouseApi) GetV2SuppliersList(c *gin.Context) {
 func (w *WarehouseApi) GetV2GoodsShelfsList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV2GoodsShelfsList(utils.GetUserID(c), pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -474,7 +474,7 @@ func (w *WarehouseApi) GetV2GoodsShelfsList(c *gin.Context) {
 func (w *WarehouseApi) GetV2OutWarehousesList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV2OutWarehousesList(utils.GetUserID(c), pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
@@ -499,7 +499,7 @@ func (w *WarehouseApi) GetV2OutWarehousesDetail(c *gin.Context) {
 func (w *WarehouseApi) GetV2InWarehousesList(c *gin.Context) {
 	var pageInfo request.Page
 	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
-	pageInfo.Page, _ = strconv.Atoi(c.Query("pageSize"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	date, total, err := warehouseService.GetV2InWarehousesList(utils.GetUserID(c), pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
