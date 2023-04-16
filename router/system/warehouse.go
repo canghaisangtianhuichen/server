@@ -55,9 +55,8 @@ func (s *WarehouseRouter) InitWarehouseRouter(Router *gin.RouterGroup) (R gin.IR
 		warehouseRouter.POST("v2/addGoodsShelf", warehouseApi.AddGoodsShelf)       //增加货架
 		warehouseRouter.POST("v2/deleteGood", warehouseApi.DeleteGood)             //删除商品
 		warehouseRouter.POST("v2/deleteGoodsShelf", warehouseApi.DeleteGoodsShelf) //删除货架
-		//todo:生成出库单与出库单详情，生产入库单与入库单详情
-		warehouseRouter.POST("v2/inWarehouse", warehouseApi.InWarehouse)   //生产入库单与入库单详情
-		warehouseRouter.POST("v2/outWarehouse", warehouseApi.OutWarehouse) //生成出库单与出库单详情
+		warehouseRouter.POST("v2/inWarehouse", warehouseApi.InWarehouse)           //生成入库单与入库单详情
+		warehouseRouter.POST("v2/outWarehouse", warehouseApi.OutWarehouse)         //生成出库单与出库单详情
 	}
 	return warehouseRouter
 }

@@ -107,13 +107,18 @@ func (warehouseService *WarehouseService) GetV1OutWarehousesList(pageInfo reques
 	}
 	return data, total, nil
 }
-func (warehouseService *WarehouseService) GetV1OutWarehousesDetail(orderNumber string) (data response.OutWarehousesDetailsResponse, err error) {
-	sql := "select * from out_warehouses_details where deleted_at is null and order_number=?"
-	err1 := global.GVA_DB.Raw(sql, orderNumber).Scan(&data)
+func (warehouseService *WarehouseService) GetV1OutWarehousesDetail(orderNumber string, pageInfo request.Page) (data []response.OutWarehousesDetailsResponse, total int64, err error) {
+	sql := "select * from out_warehouses_details where deleted_at is null and order_number=? limit ?,?"
+	err1 := global.GVA_DB.Raw(sql, orderNumber, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
-		return data, errors.New("系统错误")
+		return data, total, errors.New("系统错误")
 	}
-	return data, nil
+	sql = " select count(id) from out_warehouses_details wheredeleted_at is null and order_number=?"
+	err1 = global.GVA_DB.Raw(sql, orderNumber).Scan(&total)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
+	}
+	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1InWarehousesList(pageInfo request.Page) (data []response.InWarehousesResponse, total int64, err error) {
 	sql := "select * from in_warehouses where deleted_at is null limit ?,?"
@@ -128,13 +133,18 @@ func (warehouseService *WarehouseService) GetV1InWarehousesList(pageInfo request
 	}
 	return data, total, nil
 }
-func (warehouseService *WarehouseService) GetV1InWarehousesDetail(orderNumber string) (data response.InWarehousesDetailsResponse, err error) {
-	sql := "select * from in_warehouses_details where deleted_at is null and order_number=?"
-	err1 := global.GVA_DB.Raw(sql, orderNumber).Scan(&data)
+func (warehouseService *WarehouseService) GetV1InWarehousesDetail(orderNumber string, pageInfo request.Page) (data []response.InWarehousesDetailsResponse, total int64, err error) {
+	sql := "select * from in_warehouses_details where deleted_at is null and order_number=? limit ?,?"
+	err1 := global.GVA_DB.Raw(sql, orderNumber, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
-		return data, errors.New("系统错误")
+		return data, total, errors.New("系统错误")
 	}
-	return data, nil
+	sql = " select count(id) from in_warehouses_details wheredeleted_at is null and order_number=?"
+	err1 = global.GVA_DB.Raw(sql, orderNumber).Scan(&total)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
+	}
+	return data, total, nil
 }
 
 func (warehouseService *WarehouseService) AddCustomer(info request.CustomersRequest) (err error) {
@@ -509,22 +519,24 @@ func (warehouseService *WarehouseService) GetV2OutWarehousesList(sysId uint, pag
 	}
 	return data, total, nil
 }
-func (warehouseService *WarehouseService) GetV2OutWarehousesDetail(orderNumber string, sysId uint) (data response.OutWarehousesDetailsResponse, err error) {
+func (warehouseService *WarehouseService) GetV2OutWarehousesDetail(orderNumber string, sysId uint, pageInfo request.Page) (data []response.OutWarehousesDetailsResponse, total int64, err error) {
 	var warehouseId uint
 	sql := "select warehouse_id from staffs where deleted_at is null and sys_id=?"
 	err1 := global.GVA_DB.Raw(sql, sysId).Scan(&warehouseId)
 	if err1.Error != nil {
-		return data, errors.New("系统错误")
+		return data, total, errors.New("系统错误")
 	}
-	sql = "select * from out_warehouses_details where deleted_at is null and order_number=? and warehouse_id=?"
-	err1 = global.GVA_DB.Raw(sql, orderNumber, warehouseId).Scan(&data)
+	sql = "select * from out_warehouses_details where deleted_at is null and order_number=? and warehouse_id=? limit ?,?"
+	err1 = global.GVA_DB.Raw(sql, orderNumber, warehouseId, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
-		return data, errors.New("系统错误")
+		return data, total, errors.New("系统错误")
 	}
-	if data.Id == 0 {
-		return data, errors.New("非法请求")
+	sql = " select count(id) from out_warehouses_details where deleted_at is null and order_number=? and warehouse_id=?"
+	err1 = global.GVA_DB.Raw(sql, orderNumber, warehouseId).Scan(&total)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
 	}
-	return data, nil
+	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV2InWarehousesList(sysId uint, pageInfo request.Page) (data []response.InWarehousesResponse, total int64, err error) {
 	var warehouseId uint
@@ -545,22 +557,24 @@ func (warehouseService *WarehouseService) GetV2InWarehousesList(sysId uint, page
 	}
 	return data, total, nil
 }
-func (warehouseService *WarehouseService) GetV2InWarehousesDetail(orderNumber string, sysId uint) (data response.InWarehousesDetailsResponse, err error) {
+func (warehouseService *WarehouseService) GetV2InWarehousesDetail(orderNumber string, sysId uint, pageInfo request.Page) (data []response.InWarehousesDetailsResponse, total int64, err error) {
 	var warehouseId uint
 	sql := "select warehouse_id from staffs where deleted_at is null and sys_id=?"
 	err1 := global.GVA_DB.Raw(sql, sysId).Scan(&warehouseId)
 	if err1.Error != nil {
-		return data, errors.New("系统错误")
+		return data, total, errors.New("系统错误")
 	}
-	sql = "select * from in_warehouses_details where deleted_at is null and order_number=? and warehouse_id=?"
-	err1 = global.GVA_DB.Raw(sql, orderNumber, warehouseId).Scan(&data)
+	sql = "select * from in_warehouses_details where deleted_at is null and order_number=? and warehouse_id=? limit ?,?"
+	err1 = global.GVA_DB.Raw(sql, orderNumber, warehouseId, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
-		return data, errors.New("系统错误")
+		return data, total, errors.New("系统错误")
 	}
-	if data.Id == 0 {
-		return data, errors.New("非法请求")
+	sql = " select count(id) from in_warehouses_details where deleted_at is null and order_number=? and warehouse_id=?"
+	err1 = global.GVA_DB.Raw(sql, orderNumber, warehouseId).Scan(&total)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
 	}
-	return data, nil
+	return data, total, nil
 }
 
 func (warehouseService *WarehouseService) AddGood(info request.AddGoodsRequest, sysId uint) (err error) {

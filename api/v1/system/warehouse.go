@@ -128,12 +128,20 @@ func (w *WarehouseApi) GetV1OutWarehousesList(c *gin.Context) {
 	}
 }
 func (w *WarehouseApi) GetV1OutWarehousesDetail(c *gin.Context) {
+	var pageInfo request.Page
+	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	orderNumber := c.Query("orderNumber")
-	date, err := warehouseService.GetV1OutWarehousesDetail(orderNumber)
+	date, total, err := warehouseService.GetV1OutWarehousesDetail(orderNumber, pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
 	} else {
-		response.OkWithDetailed(date, "成功", c)
+		response.OkWithDetailed(response.PageResult{
+			List:     date,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "成功", c)
 	}
 }
 func (w *WarehouseApi) GetV1InWarehousesList(c *gin.Context) {
@@ -153,12 +161,20 @@ func (w *WarehouseApi) GetV1InWarehousesList(c *gin.Context) {
 	}
 }
 func (w *WarehouseApi) GetV1InWarehousesDetail(c *gin.Context) {
+	var pageInfo request.Page
+	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
 	orderNumber := c.Query("orderNumber")
-	date, err := warehouseService.GetV1InWarehousesDetail(orderNumber)
+	date, total, err := warehouseService.GetV1InWarehousesDetail(orderNumber, pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
 	} else {
-		response.OkWithDetailed(date, "成功", c)
+		response.OkWithDetailed(response.PageResult{
+			List:     date,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "成功", c)
 	}
 }
 func (w *WarehouseApi) AddCustomer(c *gin.Context) {
@@ -489,11 +505,19 @@ func (w *WarehouseApi) GetV2OutWarehousesList(c *gin.Context) {
 }
 func (w *WarehouseApi) GetV2OutWarehousesDetail(c *gin.Context) {
 	orderNumber := c.Query("orderNumber")
-	date, err := warehouseService.GetV2OutWarehousesDetail(orderNumber, utils.GetUserID(c))
+	var pageInfo request.Page
+	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
+	date, total, err := warehouseService.GetV2OutWarehousesDetail(orderNumber, utils.GetUserID(c), pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
 	} else {
-		response.OkWithDetailed(date, "成功", c)
+		response.OkWithDetailed(response.PageResult{
+			List:     date,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "成功", c)
 	}
 }
 func (w *WarehouseApi) GetV2InWarehousesList(c *gin.Context) {
@@ -514,11 +538,19 @@ func (w *WarehouseApi) GetV2InWarehousesList(c *gin.Context) {
 }
 func (w *WarehouseApi) GetV2InWarehousesDetail(c *gin.Context) {
 	orderNumber := c.Query("orderNumber")
-	date, err := warehouseService.GetV2InWarehousesDetail(orderNumber, utils.GetUserID(c))
+	var pageInfo request.Page
+	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
+	date, total, err := warehouseService.GetV2InWarehousesDetail(orderNumber, utils.GetUserID(c), pageInfo)
 	if err != nil {
 		response.FailWithDetailed("", err.Error(), c)
 	} else {
-		response.OkWithDetailed(date, "成功", c)
+		response.OkWithDetailed(response.PageResult{
+			List:     date,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "成功", c)
 	}
 }
 
