@@ -89,6 +89,8 @@ type GoodsShelfsResponse struct {
 	Base
 	Name           string `json:"name"`
 	WarehouseId    uint   `json:"warehouseId"`
+	GoodsId        uint   `json:"goodsId"`
+	GoodsName      string `json:"goodsName"`
 	RealTimeWeight int    `json:"realTimeWeight"`
 	MaxWeight      int    `json:"maxWeight"`
 }

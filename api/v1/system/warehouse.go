@@ -262,7 +262,7 @@ func (w *WarehouseApi) AddStaff(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(r, utils.RegisterVerify)
+	err = utils.Verify(r, utils.Register1Verify)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
