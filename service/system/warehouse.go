@@ -150,7 +150,7 @@ func (warehouseService *WarehouseService) GetV1InWarehousesDetail(orderNumber st
 func (warehouseService *WarehouseService) AddCustomer(info request.CustomersRequest) (err error) {
 	var total int64
 	var customer warehouse.Customers
-	if info.Phone != 0 {
+	if info.Phone != "" {
 		sql := "select count(id) from customers where deleted_at is null and phone=? "
 		err1 := global.GVA_DB.Raw(sql, info.Phone).Scan(&total)
 		if err1.Error != nil {
@@ -183,7 +183,7 @@ func (warehouseService *WarehouseService) AddCustomer(info request.CustomersRequ
 func (warehouseService *WarehouseService) AddSupplier(info request.SuppliersRequest) (err error) {
 	var total int64
 	var supplier warehouse.Suppliers
-	if info.Phone != 0 {
+	if info.Phone != "" {
 		sql := "select count(id) from suppliers where deleted_at is null and phone=? "
 		err1 := global.GVA_DB.Raw(sql, info.Phone).Scan(&total)
 		if err1.Error != nil {
@@ -298,7 +298,7 @@ func (warehouseService *WarehouseService) AddStaff(u system.SysUser, warehouseId
 		}
 		staff.Name = u.NickName
 		staff.WarehouseId = warehouseId
-		staff.Phone, _ = strconv.Atoi(u.Phone)
+		staff.Phone = u.Phone
 		staff.Email = u.Email
 		staff.SysId = temUser.ID
 		err1 = tx.Table("staffs").Create(&staff)

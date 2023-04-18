@@ -61,21 +61,21 @@ type OutWarehousesDetailsResponse struct {
 type StaffsResponse struct {
 	Base
 	Name        string `json:"name"`
-	Phone       int    `json:"phone"`
+	Phone       string `json:"phone"`
 	Email       string `json:"email"`
 	WarehouseId uint   `json:"warehouseId"`
 }
 type CustomersResponse struct {
 	Base
 	Name  string `json:"name"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 
 type SupplierResponse struct {
 	Base
 	Name  string `json:"name"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 

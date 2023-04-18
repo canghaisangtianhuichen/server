@@ -6,12 +6,12 @@ type Page struct {
 }
 type CustomersRequest struct {
 	Name  string `json:"name" bind:"require"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 type SuppliersRequest struct {
 	Name  string `json:"name" bind:"require"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 type WarehousesRequest struct {
@@ -68,19 +68,19 @@ type DeleteGoodsShelfRequest struct {
 type UpdateStaffRequest struct {
 	Id    uint   `json:"id" bind:"require"`
 	Name  string `json:"name" bind:"require"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 type UpdateCustomerRequest struct {
 	Id    uint   `json:"id" bind:"require"`
 	Name  string `json:"name" bind:"require"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 type UpdateSupplierRequest struct {
 	Id    uint   `json:"id" bind:"require"`
 	Name  string `json:"name" bind:"require"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 type UpdateWarehouseRequest struct {

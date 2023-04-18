@@ -60,21 +60,21 @@ type Staffs struct {
 	Base
 	SysId       uint   `json:"sysId"`
 	Name        string `json:"name"`
-	Phone       int    `json:"phone"`
+	Phone       string `json:"phone"`
 	Email       string `json:"email"`
 	WarehouseId uint   `json:"warehouseId"`
 }
 type Customers struct {
 	Base
 	Name  string `json:"name"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 
 type Suppliers struct {
 	Base
 	Name  string `json:"name"`
-	Phone int    `json:"phone"`
+	Phone string `json:"phone"`
 	Email string `json:"email"`
 }
 

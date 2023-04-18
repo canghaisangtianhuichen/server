@@ -184,7 +184,7 @@ func (w *WarehouseApi) AddCustomer(c *gin.Context) {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
 	}
-	if info.Phone == 0 && info.Email == "" {
+	if info.Phone == "" && info.Email == "" {
 		response.FailWithDetailed("", "必须要有邮箱或手机", c)
 		return
 	}
@@ -202,7 +202,7 @@ func (w *WarehouseApi) AddSupplier(c *gin.Context) {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
 	}
-	if info.Phone == 0 && info.Email == "" {
+	if info.Phone == "" && info.Email == "" {
 		response.FailWithDetailed("", "必须要有邮箱或手机", c)
 		return
 	}
@@ -344,7 +344,7 @@ func (w *WarehouseApi) UpdateStaff(c *gin.Context) {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
 	}
-	if info.Phone == 0 && info.Email == "" {
+	if info.Phone == "" && info.Email == "" {
 		response.FailWithDetailed("", "必须要有邮箱或手机", c)
 		return
 	}
@@ -362,7 +362,7 @@ func (w *WarehouseApi) UpdateCustomer(c *gin.Context) {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
 	}
-	if info.Phone == 0 && info.Email == "" {
+	if info.Phone == "" && info.Email == "" {
 		response.FailWithDetailed("", "必须要有邮箱或手机", c)
 		return
 	}
@@ -380,7 +380,7 @@ func (w *WarehouseApi) UpdateSupplier(c *gin.Context) {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
 	}
-	if info.Phone == 0 && info.Email == "" {
+	if info.Phone == "" && info.Email == "" {
 		response.FailWithDetailed("", "必须要有邮箱或手机", c)
 		return
 	}
