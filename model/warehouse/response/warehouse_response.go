@@ -12,6 +12,7 @@ type PageResult struct {
 type Base struct {
 	Id        uint      `json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 type WarehousesResponse struct {
 	Base
@@ -20,22 +21,28 @@ type WarehousesResponse struct {
 }
 type InWarehousesResponse struct {
 	Base
-	OrderNumber string `json:"orderNumber"`
-	WarehouseId uint   `json:"warehouseId"`
-	StaffId     uint   `json:"staffId"`
-	Weight      int    `json:"weight"`
-	Type        string `json:"type"` //0:调拨入库 1:采购入库
-	FromId      uint   `json:"fromId"`
+	OrderNumber   string `json:"orderNumber"`
+	WarehouseId   uint   `json:"warehouseId"`
+	WarehouseName string `json:"warehouseName"`
+	StaffId       uint   `json:"staffId"`
+	StaffName     string `json:"staffName"`
+	Weight        int    `json:"weight"`
+	Type          string `json:"type"` //0:调拨入库 1:采购入库
+	FromId        uint   `json:"fromId"`
+	FromWhere     string `json:"fromWhere"`
 }
 
 type OutWarehousesResponse struct {
 	Base
-	OrderNumber string `json:"orderNumber"`
-	WarehouseId uint   `json:"warehouseId"`
-	StaffId     uint   `json:"staffId"`
-	Weight      int    `json:"weight"`
-	Type        string `json:"type"` //0:调拨出库 1:销售出库
-	ToId        uint   `json:"toId"`
+	OrderNumber   string `json:"orderNumber"`
+	WarehouseId   uint   `json:"warehouseId"`
+	WarehouseName string `json:"warehouseName"`
+	StaffId       uint   `json:"staffId"`
+	StaffName     string `json:"staffName"`
+	Weight        int    `json:"weight"`
+	Type          string `json:"type"` //0:调拨出库 1:销售出库
+	ToId          uint   `json:"toId"`
+	ToWhere       string `json:"toWhere"`
 }
 
 type InWarehousesDetailsResponse struct {
@@ -60,10 +67,12 @@ type OutWarehousesDetailsResponse struct {
 
 type StaffsResponse struct {
 	Base
-	Name        string `json:"name"`
-	Phone       string `json:"phone"`
-	Email       string `json:"email"`
-	WarehouseId uint   `json:"warehouseId"`
+	Name          string `json:"name"`
+	Phone         string `json:"phone"`
+	Email         string `json:"email"`
+	WarehouseId   uint   `json:"warehouseId"`
+	WarehouseName uint   `json:"warehouseName"`
+	Status        string `json:"status"`
 }
 type CustomersResponse struct {
 	Base
@@ -81,14 +90,16 @@ type SupplierResponse struct {
 
 type GoodsResponse struct {
 	Base
-	Name        string `json:"name"`
-	WarehouseId uint   `json:"warehouseId"`
-	Weight      int    `json:"weight"`
+	Name          string `json:"name"`
+	WarehouseId   uint   `json:"warehouseId"`
+	WarehouseName string `json:"warehouseName"`
+	Weight        int    `json:"weight"`
 }
 type GoodsShelfsResponse struct {
 	Base
 	Name           string `json:"name"`
 	WarehouseId    uint   `json:"warehouseId"`
+	WarehouseName  string `json:"warehouseName"`
 	GoodsId        uint   `json:"goodsId"`
 	GoodsName      string `json:"goodsName"`
 	RealTimeWeight int    `json:"realTimeWeight"`

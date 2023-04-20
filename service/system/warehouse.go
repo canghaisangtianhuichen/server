@@ -30,7 +30,7 @@ func (warehouseService *WarehouseService) GetV1WarehousesList(pageInfo request.P
 	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1GoodsList(pageInfo request.Page) (data []response.GoodsResponse, total int64, err error) {
-	sql := "select * from goods where deleted_at is null limit ?,?"
+	sql := "select g.id,g.name,g.warehouse_id,w.name WarehouseName,g.weight,g.updated_at from goods g left join warehouses w on g.warehouse_id=w.id  where g.deleted_at is null and w.deleted_at is null limit ?,?"
 	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -43,12 +43,12 @@ func (warehouseService *WarehouseService) GetV1GoodsList(pageInfo request.Page) 
 	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1StaffsList(pageInfo request.Page) (data []response.StaffsResponse, total int64, err error) {
-	sql := "select * from staffs where deleted_at is null limit ?,?"
+	sql := "SELECT s.id, s.`name`, s.email, s.phone, s.warehouse_id, w.`name` warehouseName, case when s.deleted_at is null then '在职' else '离职' end Status, s.created_at FROM staffs s LEFT JOIN warehouses w ON w.id = s.warehouse_id limit ?,?"
 	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
 	}
-	sql = " select count(id) from staffs where deleted_at is null"
+	sql = " select count(id) from staffs  "
 	err1 = global.GVA_DB.Raw(sql).Scan(&total)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -82,7 +82,7 @@ func (warehouseService *WarehouseService) GetV1SuppliersList(pageInfo request.Pa
 	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1GoodsShelfsList(pageInfo request.Page) (data []response.GoodsShelfsResponse, total int64, err error) {
-	sql := "select gs.id,gs.`name`,gs.warehouse_id,gs.goods_id,g.name GoodsName,gs.real_time_weight,gs.max_weight,gs.created_at,gs.updated_at from goods_shelfs gs left join goods g on (gs.goods_id=g.id and gs.warehouse_id=g.warehouse_id ) where gs.deleted_at is null and g.deleted_at is null limit ?,?"
+	sql := "select gs.id,gs.`name`,gs.warehouse_id,w.name WarehouseName,gs.goods_id,g.name GoodsName,gs.real_time_weight,gs.max_weight,gs.created_at,gs.updated_at from goods_shelfs gs left join goods g on (gs.goods_id=g.id and gs.warehouse_id=g.warehouse_id ) left join warehouses w on gs.warehouse_id=w.id where gs.deleted_at is null and g.deleted_at is null and w.deleted_at is null limit ?,?"
 	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -95,7 +95,7 @@ func (warehouseService *WarehouseService) GetV1GoodsShelfsList(pageInfo request.
 	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1OutWarehousesList(pageInfo request.Page) (data []response.OutWarehousesResponse, total int64, err error) {
-	sql := "select * from out_warehouses where deleted_at is null limit ?,?"
+	sql := "SELECT ow.order_number, ow.warehouse_id, w.`name` WarehouseName, ow.staff_id, s.`name` StaffName, ow.weight, ow.to_id , case ow.type when 0 then '调拨出库' else '销售出库' end Type, case ow.type when 0 then w1.`name` else su.`name` end ToWhere, ow.created_at FROM out_warehouses ow LEFT JOIN warehouses w ON ow.warehouse_id = w.id left join staffs s on ow.staff_id=s.id left join suppliers su on ow.to_id=su.id left join warehouses w1 on ow.to_id=w1.id WHERE w.deleted_at IS NULL and s.deleted_at IS NULL AND ow.deleted_at IS NULL ORDER BY ow.created_at limit ?,?"
 	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -121,7 +121,7 @@ func (warehouseService *WarehouseService) GetV1OutWarehousesDetail(orderNumber s
 	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1InWarehousesList(pageInfo request.Page) (data []response.InWarehousesResponse, total int64, err error) {
-	sql := "select * from in_warehouses where deleted_at is null limit ?,?"
+	sql := "SELECT ow.order_number, ow.warehouse_id, w.`name` WarehouseName, ow.staff_id, s.`name` StaffName, ow.weight, ow.from_id , case ow.type when 0 then '调拨出库' else '销售出库' end Type, case ow.type when 0 then w1.`name` else su.`name` end FromWhere, ow.created_at FROM in_warehouses ow LEFT JOIN warehouses w ON ow.warehouse_id = w.id left join staffs s on ow.staff_id=s.id left join customers su on ow.from_id=su.id left join warehouses w1 on ow.from_id=w1.id WHERE w.deleted_at IS NULL and s.deleted_at IS NULL AND ow.deleted_at IS NULL ORDER BY ow.created_at limit ?,?"
 	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -568,7 +568,7 @@ func (warehouseService *WarehouseService) GetV2OutWarehousesList(sysId uint, pag
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
 	}
-	sql = "select * from out_warehouses where deleted_at is null and warehouse_id=? limit ?,?"
+	sql = "select * from out_warehouses where deleted_at is null and warehouse_id=? order by created_at limit ?,?"
 	err1 = global.GVA_DB.Raw(sql, warehouseId, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -606,7 +606,7 @@ func (warehouseService *WarehouseService) GetV2InWarehousesList(sysId uint, page
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
 	}
-	sql = "select * from in_warehouses where deleted_at is null and warehouse_id=? limit ?,?"
+	sql = "select * from in_warehouses where deleted_at is null and warehouse_id=? order by created_at limit ?,?"
 	err1 = global.GVA_DB.Raw(sql, warehouseId, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
