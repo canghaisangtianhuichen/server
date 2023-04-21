@@ -71,7 +71,7 @@ type StaffsResponse struct {
 	Phone         string `json:"phone"`
 	Email         string `json:"email"`
 	WarehouseId   uint   `json:"warehouseId"`
-	WarehouseName uint   `json:"warehouseName"`
+	WarehouseName string `json:"warehouseName"`
 	Status        string `json:"status"`
 }
 type CustomersResponse struct {
