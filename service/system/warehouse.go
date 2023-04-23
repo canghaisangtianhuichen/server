@@ -568,7 +568,7 @@ func (warehouseService *WarehouseService) GetV2OutWarehousesList(sysId uint, pag
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
 	}
-	sql = "select * from out_warehouses where deleted_at is null and warehouse_id=? order by created_at limit ?,?"
+	sql = "SELECT ow.order_number, ow.warehouse_id, w.`name` WarehouseName, ow.staff_id, s.`name` StaffName, ow.weight, ow.to_id , case ow.type when 0 then '调拨出库' else '销售出库' end Type, case ow.type when 0 then w1.`name` else su.`name` end ToWhere, ow.created_at,ow.updated_at FROM out_warehouses ow LEFT JOIN warehouses w ON ow.warehouse_id = w.id left join staffs s on ow.staff_id=s.id left join customers su on ow.to_id=su.id left join warehouses w1 on ow.to_id=w1.id WHERE w.deleted_at IS NULL and s.deleted_at IS NULL AND ow.deleted_at IS NULL  and ow.warehouse_id=? order by ow.created_at limit ?,?"
 	err1 = global.GVA_DB.Raw(sql, warehouseId, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -606,7 +606,7 @@ func (warehouseService *WarehouseService) GetV2InWarehousesList(sysId uint, page
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
 	}
-	sql = "SELECT ow.order_number, ow.warehouse_id, w.`name` WarehouseName, ow.staff_id, s.`name` StaffName, ow.weight, ow.from_id , case ow.type when 0 then '调拨出库' else '销售出库' end Type, case ow.type when 0 then w1.`name` else su.`name` end FromWhere, ow.created_at,ow.updated_at FROM in_warehouses ow LEFT JOIN warehouses w ON ow.warehouse_id = w.id left join staffs s on ow.staff_id=s.id left join customers su on ow.from_id=su.id left join warehouses w1 on ow.from_id=w1.id WHERE w.deleted_at IS NULL and s.deleted_at IS NULL AND ow.deleted_at IS NULL  and ow.warehouse_id=? order by ow.created_at limit ?,?"
+	sql = "SELECT ow.order_number, ow.warehouse_id, w.`name` WarehouseName, ow.staff_id, s.`name` StaffName, ow.weight, ow.from_id , case ow.type when 0 then '调拨入库' else '采购入库' end Type, case ow.type when 0 then w1.`name` else su.`name` end FromWhere, ow.created_at,ow.updated_at FROM in_warehouses ow LEFT JOIN warehouses w ON ow.warehouse_id = w.id left join staffs s on ow.staff_id=s.id left join suppliers su on ow.from_id=su.id left join warehouses w1 on ow.from_id=w1.id WHERE w.deleted_at IS NULL and s.deleted_at IS NULL AND ow.deleted_at IS NULL  and ow.warehouse_id=? order by ow.created_at limit ?,?"
 	err1 = global.GVA_DB.Raw(sql, warehouseId, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -704,13 +704,13 @@ func (warehouseService *WarehouseService) DeleteGood(info request.DeleteGoodRequ
 	if info.WarehouseId != warehouseId {
 		return errors.New("非法请求")
 	}
-	sql = "select count(id) from goods where deleted_at is null and `name`=? and warehouse_id=?  "
+	sql = "select count(id) from goods where deleted_at is null and `name`=? and warehouse_id=? and weight=0  "
 	err1 = global.GVA_DB.Raw(sql, info.Name, warehouseId).Scan(&total)
 	if err1.Error != nil {
 		return errors.New("系统错误")
 	}
 	if total != 1 {
-		return errors.New("仓库不存在该货物")
+		return errors.New("仓库仍存在该货物，请先将该货物清空")
 	}
 	err1 = global.GVA_DB.Table("goods").Where("name=? and warehouse_id=? and deleted_at is null", info.Name, info.WarehouseId).Update("deleted_at", time.Now())
 	if err1.Error != nil {
@@ -729,13 +729,13 @@ func (warehouseService *WarehouseService) DeleteGoodsShelf(info request.DeleteGo
 	if info.WarehouseId != warehouseId {
 		return errors.New("非法请求")
 	}
-	sql = "select count(id) from goods_shelfs where deleted_at is null and `name`=? and warehouse_id=?  "
+	sql = "select count(id) from goods_shelfs where deleted_at is null and `name`=? and warehouse_id=? and real_time_weight=0  "
 	err1 = global.GVA_DB.Raw(sql, info.Name, warehouseId).Scan(&total)
 	if err1.Error != nil {
 		return errors.New("系统错误")
 	}
 	if total != 1 {
-		return errors.New("仓库不存在该货架")
+		return errors.New("货架上仍有货物，请先将货物转移")
 	}
 
 	err1 = global.GVA_DB.Table("goods_shelfs").Where("name=? and warehouse_id=? and deleted_at is null", info.Name, info.WarehouseId).Update("deleted_at", time.Now())
