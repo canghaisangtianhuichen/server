@@ -179,7 +179,7 @@ func (w *WarehouseApi) GetV1InWarehousesDetail(c *gin.Context) {
 }
 func (w *WarehouseApi) AddCustomer(c *gin.Context) {
 	var info request.CustomersRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -197,7 +197,7 @@ func (w *WarehouseApi) AddCustomer(c *gin.Context) {
 }
 func (w *WarehouseApi) AddSupplier(c *gin.Context) {
 	var info request.SuppliersRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -215,7 +215,7 @@ func (w *WarehouseApi) AddSupplier(c *gin.Context) {
 }
 func (w *WarehouseApi) AddWarehouse(c *gin.Context) {
 	var info request.WarehousesRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -229,7 +229,7 @@ func (w *WarehouseApi) AddWarehouse(c *gin.Context) {
 }
 func (w *WarehouseApi) AddWarehouseAndstaffRelations(c *gin.Context) {
 	var info request.AddWarehouseAndstaffRelations
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -243,7 +243,7 @@ func (w *WarehouseApi) AddWarehouseAndstaffRelations(c *gin.Context) {
 }
 func (w *WarehouseApi) CancelWarehouseAndstaffRelations(c *gin.Context) {
 	var info request.CancelWarehouseAndstaffRelations
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -282,7 +282,7 @@ func (w *WarehouseApi) AddStaff(c *gin.Context) {
 }
 func (w *WarehouseApi) DeleteStaff(c *gin.Context) {
 	var info request.DeleteStaff
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -296,7 +296,7 @@ func (w *WarehouseApi) DeleteStaff(c *gin.Context) {
 }
 func (w *WarehouseApi) DeleteCustomer(c *gin.Context) {
 	var info request.DeleteCustomer
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -310,7 +310,7 @@ func (w *WarehouseApi) DeleteCustomer(c *gin.Context) {
 }
 func (w *WarehouseApi) DeleteSupplier(c *gin.Context) {
 	var info request.DeleteSupplier
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -324,7 +324,7 @@ func (w *WarehouseApi) DeleteSupplier(c *gin.Context) {
 }
 func (w *WarehouseApi) DeleteWarehouse(c *gin.Context) {
 	var info request.DeleteWarehouse
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -339,7 +339,7 @@ func (w *WarehouseApi) DeleteWarehouse(c *gin.Context) {
 
 func (w *WarehouseApi) UpdateStaff(c *gin.Context) {
 	var info request.UpdateStaffRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -357,7 +357,7 @@ func (w *WarehouseApi) UpdateStaff(c *gin.Context) {
 }
 func (w *WarehouseApi) UpdateCustomer(c *gin.Context) {
 	var info request.UpdateCustomerRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -375,7 +375,7 @@ func (w *WarehouseApi) UpdateCustomer(c *gin.Context) {
 }
 func (w *WarehouseApi) UpdateSupplier(c *gin.Context) {
 	var info request.UpdateSupplierRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -393,7 +393,7 @@ func (w *WarehouseApi) UpdateSupplier(c *gin.Context) {
 }
 func (w *WarehouseApi) UpdateWarehouse(c *gin.Context) {
 	var info request.UpdateWarehouseRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -556,7 +556,7 @@ func (w *WarehouseApi) GetV2InWarehousesDetail(c *gin.Context) {
 
 func (w *WarehouseApi) AddGood(c *gin.Context) {
 	var info request.AddGoodsRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -570,7 +570,7 @@ func (w *WarehouseApi) AddGood(c *gin.Context) {
 }
 func (w *WarehouseApi) AddGoodsShelf(c *gin.Context) {
 	var info request.AddGoodsShelfRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -584,7 +584,7 @@ func (w *WarehouseApi) AddGoodsShelf(c *gin.Context) {
 }
 func (w *WarehouseApi) DeleteGood(c *gin.Context) {
 	var info request.DeleteGoodRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -598,7 +598,7 @@ func (w *WarehouseApi) DeleteGood(c *gin.Context) {
 }
 func (w *WarehouseApi) DeleteGoodsShelf(c *gin.Context) {
 	var info request.DeleteGoodsShelfRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
@@ -612,9 +612,13 @@ func (w *WarehouseApi) DeleteGoodsShelf(c *gin.Context) {
 }
 func (w *WarehouseApi) InWarehouse(c *gin.Context) {
 	var info request.InWarehouseRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
+		return
+	}
+	if info.TotalWeight <= 0 {
+		response.FailWithDetailed("", "入库数量不能为零", c)
 		return
 	}
 	err = warehouseService.InWarehouse(info, utils.GetUserID(c))
@@ -626,7 +630,7 @@ func (w *WarehouseApi) InWarehouse(c *gin.Context) {
 }
 func (w *WarehouseApi) OutWarehouse(c *gin.Context) {
 	var info request.OutWarehouseRequest
-	err := c.BindJSON(&info)
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
