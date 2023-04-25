@@ -50,6 +50,7 @@ func (s *WarehouseRouter) InitWarehouseRouter(Router *gin.RouterGroup) (R gin.IR
 		warehouseRouter.GET("v2/getOutWarehousesDetail", warehouseApi.GetV2OutWarehousesDetail) //获取出库单详情
 		warehouseRouter.GET("v2/getInWarehousesList", warehouseApi.GetV2InWarehousesList)       //获取入库单列表
 		warehouseRouter.GET("v2/getInWarehousesDetail", warehouseApi.GetV2InWarehousesDetail)   //获取入库单详情
+		warehouseRouter.GET("v2/getWarehousesList", warehouseApi.GetV2WarehousesList)           //生成出/入库列表-获取仓库列表
 
 		warehouseRouter.POST("v2/addGood", warehouseApi.AddGood)                   //增加商品
 		warehouseRouter.POST("v2/addGoodsShelf", warehouseApi.AddGoodsShelf)       //增加货架

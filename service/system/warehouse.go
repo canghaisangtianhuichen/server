@@ -108,7 +108,7 @@ func (warehouseService *WarehouseService) GetV1OutWarehousesList(pageInfo reques
 	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1OutWarehousesDetail(orderNumber string, pageInfo request.Page) (data []response.OutWarehousesDetailsResponse, total int64, err error) {
-	sql := "select * from out_warehouses_details where deleted_at is null and order_number=? limit ?,?"
+	sql := "select owd.id,owd. from out_warehouses_details owd where deleted_at is null and order_number=? limit ?,?"
 	err1 := global.GVA_DB.Raw(sql, orderNumber, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -223,15 +223,6 @@ func (warehouseService *WarehouseService) AddWarehouse(info request.WarehousesRe
 	}
 	if total != 0 {
 		return errors.New("该仓库名已存在")
-	}
-
-	sql = "select count(id) from warehouses where deleted_at is null and  location=? "
-	err1 = global.GVA_DB.Raw(sql, info.Location).Scan(&total)
-	if err1.Error != nil {
-		return errors.New("系统错误")
-	}
-	if total != 0 {
-		return errors.New("该地址已有仓库")
 	}
 	warehouse.Name = info.Name
 	warehouse.Location = info.Location
@@ -632,6 +623,20 @@ func (warehouseService *WarehouseService) GetV2InWarehousesDetail(orderNumber st
 	}
 	sql = " select count(id) from in_warehouses_details where deleted_at is null and order_number=? and warehouse_id=?"
 	err1 = global.GVA_DB.Raw(sql, orderNumber, warehouseId).Scan(&total)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
+	}
+	return data, total, nil
+}
+
+func (warehouseService *WarehouseService) GetV2WarehousesList(pageInfo request.Page) (data []response.WarehousesResponse, total int64, err error) {
+	sql := "SELECT id,name,created_at,updated_at from warehouses where deleted_at is nul limit ?,?"
+	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
+	}
+	sql = " select count(id) from warehouses where deleted_at is null "
+	err1 = global.GVA_DB.Raw(sql).Scan(&total)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
 	}

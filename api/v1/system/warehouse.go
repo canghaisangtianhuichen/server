@@ -554,6 +554,22 @@ func (w *WarehouseApi) GetV2InWarehousesDetail(c *gin.Context) {
 	}
 }
 
+func (w *WarehouseApi) GetV2WarehousesList(c *gin.Context) {
+	var pageInfo request.Page
+	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
+	date, total, err := warehouseService.GetV2WarehousesList(pageInfo)
+	if err != nil {
+		response.FailWithDetailed("", err.Error(), c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     date,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "成功", c)
+	}
+}
 func (w *WarehouseApi) AddGood(c *gin.Context) {
 	var info request.AddGoodsRequest
 	err := c.ShouldBindJSON(&info)
