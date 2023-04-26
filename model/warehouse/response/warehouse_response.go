@@ -47,12 +47,15 @@ type OutWarehousesResponse struct {
 
 type InWarehousesDetailsResponse struct {
 	Base
-	OrderNumber string `json:"orderNumber"`
-	WarehouseId uint   `json:"warehouseId"`
-	StaffId     uint   `json:"staffId"`
-	GoodsId     uint   `json:"goodsId"`
-	Weight      int    `json:"weight"`
-	ShelfName   string `json:"shelfName"`
+	OrderNumber   string `json:"orderNumber"`
+	WarehouseId   uint   `json:"warehouseId"`
+	WarehouseName string `json:"warehouseName"`
+	StaffId       uint   `json:"staffId"`
+	StaffName     string `json:"staffName"`
+	GoodsId       uint   `json:"goodsId"`
+	GoodsName     string `json:"goodsName"`
+	Weight        int    `json:"weight"`
+	ShelfName     string `json:"shelfName"`
 }
 
 type OutWarehousesDetailsResponse struct {
