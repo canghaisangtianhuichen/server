@@ -633,6 +633,10 @@ func (w *WarehouseApi) InWarehouse(c *gin.Context) {
 		response.FailWithDetailed("", "绑定失败", c)
 		return
 	}
+	if info.FromId == 0 {
+		response.FailWithDetailed("", "来源不能为空", c)
+		return
+	}
 	if info.TotalWeight <= 0 {
 		response.FailWithDetailed("", "入库数量不能为零", c)
 		return
@@ -649,6 +653,14 @@ func (w *WarehouseApi) OutWarehouse(c *gin.Context) {
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithDetailed("", "绑定失败", c)
+		return
+	}
+	if info.ToId == 0 {
+		response.FailWithDetailed("", "去处不能为空", c)
+		return
+	}
+	if info.TotalWeight <= 0 {
+		response.FailWithDetailed("", "出库数量不能为零", c)
 		return
 	}
 	err = warehouseService.OutWarehouse(info, utils.GetUserID(c))

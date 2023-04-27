@@ -99,7 +99,7 @@ type InWarehouseRequest struct {
 type OutWarehouseRequest struct {
 	TotalWeight int      `json:"totalWeight" bind:"require"`
 	Type        string   `json:"type" bind:"require"` //0:调拨出库 1:采购出库
-	ToId        uint     `json:"fromId" bind:"require"`
+	ToId        uint     `json:"toId" bind:"require"`
 	GoodsId     []uint   `json:"goodsId" bind:"require"`
 	Weight      []int    `json:"weight" bind:"require"`
 	ShelfName   []string `json:"shelfName" bind:"require"`
