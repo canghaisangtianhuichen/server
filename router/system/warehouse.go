@@ -38,6 +38,7 @@ func (s *WarehouseRouter) InitWarehouseRouter(Router *gin.RouterGroup) (R gin.IR
 		warehouseRouter.POST("v1/updateCustomer", warehouseApi.UpdateCustomer)   //修改客户信息
 		warehouseRouter.POST("v1/updateSupplier", warehouseApi.UpdateSupplier)   //修改供应商信息
 		warehouseRouter.POST("v1/updateWarehouse", warehouseApi.UpdateWarehouse) //修改仓库信息
+		warehouseRouter.POST("v1/resetPassword", warehouseApi.ResetPassword)     //重置员工密码
 		//todo:修改出库单,修改出库单详情,修改入库单,修改入库单详情
 
 		//二级用户

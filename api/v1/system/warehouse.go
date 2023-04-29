@@ -405,6 +405,21 @@ func (w *WarehouseApi) UpdateWarehouse(c *gin.Context) {
 		response.OkWithDetailed("", "成功", c)
 	}
 }
+func (w *WarehouseApi) ResetPassword(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = userService.ResetPassword(user.ID)
+	if err != nil {
+		global.GVA_LOG.Error("重置失败!", zap.Error(err))
+		response.FailWithMessage("重置失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("重置成功", c)
+}
 
 // -------------------------v2-----------------
 func (w *WarehouseApi) GetV2GoodsList(c *gin.Context) {
