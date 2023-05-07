@@ -66,10 +66,11 @@ type DeleteGoodsShelfRequest struct {
 	WarehouseId uint   `json:"warehouseId" bind:"require"`
 }
 type UpdateStaffRequest struct {
-	Id    uint   `json:"id" bind:"require"`
-	Name  string `json:"name" bind:"require"`
-	Phone string `json:"phone"`
-	Email string `json:"email"`
+	Id            uint   `json:"id" bind:"require"`
+	WarehouseName string `json:"warehouseName"`
+	Name          string `json:"name" bind:"require"`
+	Phone         string `json:"phone"`
+	Email         string `json:"email"`
 }
 type UpdateCustomerRequest struct {
 	Id    uint   `json:"id" bind:"require"`

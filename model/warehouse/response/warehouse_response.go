@@ -80,6 +80,16 @@ type StaffsResponse struct {
 	WarehouseName string `json:"warehouseName"`
 	Status        string `json:"status"`
 }
+type OffStaffsResponse struct {
+	Base
+	Name          string    `json:"name"`
+	Phone         string    `json:"phone"`
+	Email         string    `json:"email"`
+	WarehouseId   uint      `json:"warehouseId"`
+	WarehouseName string    `json:"warehouseName"`
+	Status        string    `json:"status"`
+	DeletedAt     time.Time `json:"deletedAt"`
+}
 type CustomersResponse struct {
 	Base
 	Name  string `json:"name"`

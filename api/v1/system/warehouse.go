@@ -177,6 +177,22 @@ func (w *WarehouseApi) GetV1InWarehousesDetail(c *gin.Context) {
 		}, "成功", c)
 	}
 }
+func (w *WarehouseApi) GetV1OffStaffsList(c *gin.Context) {
+	var pageInfo request.Page
+	pageInfo.Page, _ = strconv.Atoi(c.Query("page"))
+	pageInfo.PageSize, _ = strconv.Atoi(c.Query("pageSize"))
+	date, total, err := warehouseService.GetV1OffStaffsList(pageInfo)
+	if err != nil {
+		response.FailWithDetailed("", err.Error(), c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     date,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "成功", c)
+	}
+}
 func (w *WarehouseApi) AddCustomer(c *gin.Context) {
 	var info request.CustomersRequest
 	err := c.ShouldBindJSON(&info)
@@ -272,7 +288,7 @@ func (w *WarehouseApi) AddStaff(c *gin.Context) {
 		AuthorityId: 2,
 	})
 	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: 2, Authorities: authorities, Enable: r.Enable, Phone: r.Phone, Email: r.Email}
-	userReturn, err := warehouseService.AddStaff(*user, r.WarehouseId)
+	userReturn, err := warehouseService.AddStaff(*user, 0)
 	if err != nil {
 		global.GVA_LOG.Error("注册失败!", zap.Error(err))
 		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
@@ -412,7 +428,7 @@ func (w *WarehouseApi) ResetPassword(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = userService.ResetPassword(user.ID)
+	err = warehouseService.ResetPassword(user.ID)
 	if err != nil {
 		global.GVA_LOG.Error("重置失败!", zap.Error(err))
 		response.FailWithMessage("重置失败"+err.Error(), c)

@@ -43,12 +43,12 @@ func (warehouseService *WarehouseService) GetV1GoodsList(pageInfo request.Page) 
 	return data, total, nil
 }
 func (warehouseService *WarehouseService) GetV1StaffsList(pageInfo request.Page) (data []response.StaffsResponse, total int64, err error) {
-	sql := "SELECT s.id, s.`name`, s.email, s.phone, s.warehouse_id, w.`name` WarehouseName, case when s.deleted_at is null then '在职' else '离职' end Status, s.created_at FROM staffs s LEFT JOIN warehouses w ON w.id = s.warehouse_id limit ?,?"
+	sql := "SELECT s.id, s.`name`, s.email, s.phone, s.warehouse_id, w.`name` WarehouseName, case when s.deleted_at is null then '在职' else '离职' end Status, s.created_at FROM staffs s LEFT JOIN warehouses w ON w.id = s.warehouse_id  where s.deleted_at is null limit ?,?"
 	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
 	}
-	sql = " select count(id) from staffs  "
+	sql = " select count(id) from staffs where deleted_at is null "
 	err1 = global.GVA_DB.Raw(sql).Scan(&total)
 	if err1.Error != nil {
 		return data, total, errors.New("系统错误")
@@ -146,7 +146,19 @@ func (warehouseService *WarehouseService) GetV1InWarehousesDetail(orderNumber st
 	}
 	return data, total, nil
 }
-
+func (warehouseService *WarehouseService) GetV1OffStaffsList(pageInfo request.Page) (data []response.OffStaffsResponse, total int64, err error) {
+	sql := "SELECT s.id, s.`name`, s.email, s.phone, s.warehouse_id, w.`name` WarehouseName, case when s.deleted_at is null then '在职' else '离职' end Status, s.created_at,s.deleted_at FROM staffs s LEFT JOIN warehouses w ON w.id = s.warehouse_id  where s.deleted_at is not null limit ?,?"
+	err1 := global.GVA_DB.Raw(sql, (pageInfo.Page-1)*pageInfo.PageSize, pageInfo.PageSize).Scan(&data)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
+	}
+	sql = " select count(id) from staffs where deleted_at is not null "
+	err1 = global.GVA_DB.Raw(sql).Scan(&total)
+	if err1.Error != nil {
+		return data, total, errors.New("系统错误")
+	}
+	return data, total, nil
+}
 func (warehouseService *WarehouseService) AddCustomer(info request.CustomersRequest) (err error) {
 	var total int64
 	var customer warehouse.Customers
@@ -288,7 +300,7 @@ func (warehouseService *WarehouseService) AddStaff(u system.SysUser, warehouseId
 			return err1.Error
 		}
 		staff.Name = u.NickName
-		staff.WarehouseId = warehouseId
+		staff.WarehouseId = 0
 		staff.Phone = u.Phone
 		staff.Email = u.Email
 		staff.SysId = temUser.ID
@@ -310,7 +322,7 @@ func (warehouseService *WarehouseService) DeleteStaff(info request.DeleteStaff) 
 			return errors.New("系统错误")
 		}
 		if total == 0 {
-			return errors.New("非法请求")
+			return errors.New("该员工已离职，请勿重复操作")
 		}
 		sql = "select sys_id from staffs where deleted_at is null and id=?  "
 		err1 = global.GVA_DB.Raw(sql, info.Id).Scan(&sysId)
@@ -392,6 +404,7 @@ func (warehouseService *WarehouseService) UpdateStaff(info request.UpdateStaffRe
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var total int64
 		var sysId uint
+		var warehouseId uint
 		sql := "select count(id) from staffs where deleted_at is null and id=?  "
 		err1 := global.GVA_DB.Raw(sql, info.Id).Scan(&total)
 		if err1.Error != nil {
@@ -400,12 +413,20 @@ func (warehouseService *WarehouseService) UpdateStaff(info request.UpdateStaffRe
 		if total == 0 {
 			return errors.New("非法请求")
 		}
+		sql = "select id from warehouses where deleted_at is null and name=?  "
+		err1 = global.GVA_DB.Raw(sql, info.WarehouseName).Scan(&warehouseId)
+		if err1.Error != nil {
+			return errors.New("系统错误")
+		}
+		if warehouseId == 0 {
+			return errors.New("仓库名错误")
+		}
 		sql = "select sys_id from staffs where deleted_at is null and id=?  "
 		err1 = global.GVA_DB.Raw(sql, info.Id).Scan(&sysId)
 		if err1.Error != nil {
 			return errors.New("系统错误")
 		}
-		err1 = global.GVA_DB.Table("staffs").Where("id=? and deleted_at is null", info.Id).Update("name", info.Name).Update("phone", info.Phone).Update("email", info.Email)
+		err1 = global.GVA_DB.Table("staffs").Where("id=? and deleted_at is null", info.Id).Update("name", info.Name).Update("phone", info.Phone).Update("email", info.Email).Update("warehouse_id", warehouseId)
 		if err1.Error != nil {
 			return errors.New("系统错误")
 		}
@@ -464,6 +485,26 @@ func (warehouseService *WarehouseService) UpdateWarehouse(info request.UpdateWar
 		return errors.New("系统错误")
 	}
 	return nil
+}
+
+func (warehouseService *WarehouseService) ResetPassword(Id uint) (err error) {
+	var total int64
+	var sysId uint
+	sql := "select count(id) from staffs where deleted_at is null and id=?  "
+	err1 := global.GVA_DB.Raw(sql, Id).Scan(&total)
+	if err1.Error != nil {
+		return errors.New("系统错误")
+	}
+	if total == 0 {
+		return errors.New("非法请求")
+	}
+	sql = "select sys_id from staffs where deleted_at is null and id=?  "
+	err1 = global.GVA_DB.Raw(sql, Id).Scan(&sysId)
+	if err1.Error != nil {
+		return errors.New("系统错误")
+	}
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", sysId).Update("password", utils.BcryptHash("123456")).Error
+	return err
 }
 
 //------------------------------------v2---------------------------------------------
